@@ -1,5 +1,3 @@
-// Neural network.cpp : Defines the entry point for the console application.
-//
 
 #include "stdafx.h"
 #include <iostream>
@@ -14,7 +12,7 @@
 
 words word2;
 
-int cahnge;
+
 
 
 //TEMPORARY USERINPUT DATA
@@ -58,7 +56,7 @@ void SortNetworks(bool deep) {
 			int highId = 0;
 
 			for (int x = 0; x < 1000; x++) {
-				//måske + istedet for * ?
+				//mÃ¥ske + istedet for * ?
 				if (((/*Networks[x].successrate*1.5 + */Networks[x].fitness / 2000.0) > highest) && (Networks[x].ident != -1)) {
 					highest = /*Networks[x].successrate*1.5 + */Networks[x].fitness / 2000.0;
 					highId = x;
@@ -745,7 +743,7 @@ check:
 
 			fileI.close();
 
-			// setting axons
+			// setting axon
 			for (int i = 0; i < 1000; i++) {
 				Networks[i].SetAxonData(INPUTS, HIDDENPERLAYER, LAYERS, OUTPUTS, AXONS);
 			}
@@ -806,5 +804,3 @@ check:
 end:
     return 0;
 }
-
-
