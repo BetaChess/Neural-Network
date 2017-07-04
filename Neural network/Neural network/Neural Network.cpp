@@ -50,7 +50,6 @@ int AXONS; // this needs more precise calculation, which is not possible without
 network Networks[1000];
 network sortingwork[1000];
 
-int change;
 
 void SortNetworks(bool deep) {
 	if (deep) {
