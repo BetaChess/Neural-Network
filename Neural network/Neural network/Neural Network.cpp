@@ -743,7 +743,7 @@ check:
 
 			fileI.close();
 
-			// setting axon
+			// setting axons
 			for (int i = 0; i < 1000; i++) {
 				Networks[i].SetAxonData(INPUTS, HIDDENPERLAYER, LAYERS, OUTPUTS, AXONS);
 			}
