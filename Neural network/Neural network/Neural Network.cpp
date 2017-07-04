@@ -14,7 +14,7 @@
 
 words word2;
 
-
+int cahnge;
 
 
 //TEMPORARY USERINPUT DATA
