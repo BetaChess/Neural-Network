@@ -42,10 +42,6 @@ public:
 	double medium;
 	double large;
 
-	double major;
-	double reverse;
-	double remove;
-
 	double mtChange;
 
 	void mutateStats();

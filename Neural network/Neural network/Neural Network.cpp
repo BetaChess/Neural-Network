@@ -68,12 +68,9 @@ void SortNetworks(bool deep) {
 			}
 
 			sortingwork[i].mutchance.large = Networks[highId].mutchance.large;
-			sortingwork[i].mutchance.major = Networks[highId].mutchance.major;
 			sortingwork[i].mutchance.medium = Networks[highId].mutchance.medium;
 			sortingwork[i].mutchance.mtChange = Networks[highId].mutchance.mtChange;
 			sortingwork[i].mutchance.mutateChance = Networks[highId].mutchance.mutateChance;
-			sortingwork[i].mutchance.remove = Networks[highId].mutchance.remove;
-			sortingwork[i].mutchance.reverse = Networks[highId].mutchance.reverse;
 			sortingwork[i].mutchance.small = Networks[highId].mutchance.small;
 
 			sortingwork[i].successrate = Networks[highId].successrate;
@@ -97,12 +94,9 @@ void SortNetworks(bool deep) {
 		}
 
 		Networks[i].mutchance.large = sortingwork[i].mutchance.large;
-		Networks[i].mutchance.major = sortingwork[i].mutchance.major;
 		Networks[i].mutchance.medium = sortingwork[i].mutchance.medium;
 		Networks[i].mutchance.mtChange = sortingwork[i].mutchance.mtChange;
 		Networks[i].mutchance.mutateChance = sortingwork[i].mutchance.mutateChance;
-		Networks[i].mutchance.remove = sortingwork[i].mutchance.remove;
-		Networks[i].mutchance.reverse = sortingwork[i].mutchance.reverse;
 		Networks[i].mutchance.small = sortingwork[i].mutchance.small;
 	}
 	for (int i = 0; i < 1000; i++) {
@@ -162,11 +156,8 @@ void breedNet(int in1, int in2) {
 		if (temp >= 0.5) {
 			Networks[in1 + i + 500].mutchance.mutateChance = Networks[in1].mutchance.mutateChance;
 			Networks[in1 + i + 500].mutchance.large = Networks[in1].mutchance.large;
-			Networks[in1 + i + 500].mutchance.major = Networks[in1].mutchance.major;
 			Networks[in1 + i + 500].mutchance.medium = Networks[in1].mutchance.medium;
 			Networks[in1 + i + 500].mutchance.mtChange = Networks[in1].mutchance.mtChange;
-			Networks[in1 + i + 500].mutchance.remove = Networks[in1].mutchance.remove;
-			Networks[in1 + i + 500].mutchance.reverse = Networks[in1].mutchance.reverse;
 			Networks[in1 + i + 500].mutchance.small = Networks[in1].mutchance.small;
 		}
 
@@ -244,12 +235,9 @@ void saveall() {
 		fileO.open("savedata/AI/" + SAVEID + "/" + SAVEID + "_Networks/" + SAVEID + std::to_string(i) + "/" + SAVEID + "_MUTATION.dat");
 
 		fileO << Networks[i].mutchance.large << std::endl;
-		fileO << Networks[i].mutchance.major << std::endl;
 		fileO << Networks[i].mutchance.medium << std::endl;
 		fileO << Networks[i].mutchance.mtChange << std::endl;
 		fileO << Networks[i].mutchance.mutateChance << std::endl;
-		fileO << Networks[i].mutchance.remove << std::endl;
-		fileO << Networks[i].mutchance.reverse << std::endl;
 		fileO << Networks[i].mutchance.small << std::endl;
 
 		fileO.close();
@@ -712,12 +700,9 @@ check:
 				fileI.open("savedata/AI/" + SAVEID + "/" + SAVEID + "_Networks/" + SAVEID + std::to_string(i) + "/" + SAVEID + "_GENOME.dat");
 
 				fileI >> Networks[i].mutchance.large;
-				fileI >> Networks[i].mutchance.major;
 				fileI >> Networks[i].mutchance.medium;
 				fileI >> Networks[i].mutchance.mtChange;
 				fileI >> Networks[i].mutchance.mutateChance;
-				fileI >> Networks[i].mutchance.remove;
-				fileI >> Networks[i].mutchance.reverse;
 				fileI >> Networks[i].mutchance.small;
 
 				fileI.close();

@@ -30,44 +30,17 @@ void hidden::convert(std::string typeD) {
 	//std::cout << "f " << temp << std::endl;
 	bool m = false;
 	if (typeD == "to0.5") {
-		if (temp < 0) {
-			temp = temp * (-1);
-			m = true;
-		}
-
-		while (temp > 1000)
-		{
-			temp = temp / 10;
-		}
 		temp = (1 - 100 / (100 + temp));
-		if (m) {
-			temp = temp * (-1);
-		}
 	}
 	else if (typeD == "sig") {
-		if (temp < 0) {
-			temp = temp * (-1);
-		}
-		while (temp > 10)
-		{
-			temp = temp / 10;
-		}
-		temp = temp * (-1);
-		temp = 1 / (1 + pow(e, -temp)) - 0.5;
+		temp = 1 / (1 + pow(e, -temp));
 	}
 	else if (typeD == "pos_add") {
-		while ((temp > 1 && temp != 1) || (temp < 0 && (temp < -1 || temp == -1))) {
-			temp = temp / 10;
-		}
 		if (temp < 0) {
 			temp = temp * -1;
 		}
 	}
-	else {
-		while ((temp > 1 && temp != 1) || (temp < 0 && (temp < -1 || temp == -1))) {
-			temp = temp / 10;
-		}
-	}
+
 	value = temp;
 }
 
@@ -83,9 +56,6 @@ mutation::mutation()
 	medium = (rand() % 100) / 100.0 / 2.0;
 	large = 0.5 - medium;
 	mtChange = (rand() % 100) / 100.0 / 4.0;
-	major = (rand() % 100) / 100.0;
-	reverse = (rand() % 100) / 100.0;
-	remove = 1.0 - reverse;
 }
 
 void mutation::mutateStats() {
@@ -144,20 +114,6 @@ void mutation::mutateStats() {
 			}
 		}
 
-		//mutate Major chance
-		else if (temp <= 2 / 7.0) {
-			temp = (rand() % 100) / 100.0;
-
-			if (temp <= 0.5) {
-				change = (rand() % 100) / 100.0 / 4.0;
-			}
-			else {
-				change = -(rand() % 100) / 100.0 / 4.0;
-			}
-
-			major += change;
-		}
-
 		//mutate medium change
 		else if (temp <= 3 / 7.0) {
 			temp = (rand() % 100) / 100.0;
@@ -199,42 +155,6 @@ void mutation::mutateStats() {
 			mutateChance += change;
 		}
 
-		//mutate Remove chance
-		else if (temp <= 5 / 7.0) {
-			temp = (rand() % 100) / 100.0;
-
-			temp = (rand() % 100) / 100.0;
-
-			if (temp <= 0.5) {
-				change = (rand() % 100) / 100.0 / 4.0;
-			}
-			else {
-				change = -(rand() % 100) / 100.0 / 4.0;
-			}
-
-			remove += change;
-
-			reverse -= change;
-		}
-
-		//mutate reverse chance
-		else if (temp <= 6 / 7.0) {
-			temp = (rand() % 100) / 100.0;
-
-			temp = (rand() % 100) / 100.0;
-
-			if (temp <= 0.5) {
-				change = (rand() % 100) / 100.0 / 4.0;
-			}
-			else {
-				change = -(rand() % 100) / 100.0 / 4.0;
-			}
-
-			reverse += change;
-
-			remove -= change;
-		}
-
 		//mutate small chance
 		else if (temp <= 1) {
 			temp = (rand() % 100) / 100.0;
@@ -267,38 +187,6 @@ void mutation::mutateStats() {
 
 	//check values
 b2:
-	if (remove < 0.01) {
-		remove = 0.01;
-	}
-	else if (remove > 0.98) {
-		remove = 0.98;
-	}
-	if (reverse < 0.01) {
-		reverse = 0.01;
-	}
-	else if (reverse > 0.98) {
-		reverse = 0.98;
-	}
-
-	if (remove + reverse != 1) {
-		change = 1 - remove + reverse;
-
-		temp = (rand() % 100) / 100.0;
-		if (temp <= 0.5) {
-			remove += change;
-		}
-		else {
-			reverse += change;
-		}
-	}
-
-	if (major < 0.01) {
-		major = 0.01;
-	}
-	else if (major > 0.45) {
-		major = 0.4;
-	}
-
 	if (small < 0.01) {
 		small = 0.01;
 	}
@@ -355,9 +243,6 @@ mutation::mutation(const mutation& source)
 	small = source.small;
 	medium = source.medium;
 	large = source.large;
-	major = source.major;
-	reverse = source.reverse;
-	remove = source.remove;
 }
 
 //overloaded assignmetn operator
@@ -374,9 +259,6 @@ mutation& mutation::operator=(const mutation& source)
 	small = source.small;
 	medium = source.medium;
 	large = source.large;
-	major = source.major;
-	reverse = source.reverse;
-	remove = source.remove;
 }
 
 
@@ -575,9 +457,6 @@ void network::mutate(int axons) {
 	if (mutchance.mtChange < 0.05) {
 		mutchance.mtChange = 0.3;
 	}
-	if (mutchance.major < 0.05) {
-		mutchance.major = 0.1;
-	}
 	
 
 	mutchance.mutateStats();
@@ -590,76 +469,60 @@ void network::mutate(int axons) {
 		if (temp <= mutchance.mutateChance) {
 			//determine if a major or "minor" change shall be made.
 
+			//"minor" change
+			
 			temp = (rand() % 100) / 100.0;
-			//major change
-			if (temp <= mutchance.major) {
-				temp = (rand() % 100) / 100.0;
 
-				if (temp <= mutchance.remove) {
-					Naxon[i].weight = 0;
-					NGENOME[i] = 0;
-				}
-				else {
-					Naxon[i].weight = -Naxon[i].weight;
-					NGENOME[i] = -NGENOME[i];
-				}
+			if ((mutchance.large + mutchance.medium + mutchance.small) != 1) {
+				std::exit(-2);
 			}
 
-			//"minor" change
-			else {
+			else if (temp <= mutchance.large) {
+				change = 0;
+
+				while (change < 0.5) {
+					change = (rand() % 100) / 100.0;
+				}
+
 				temp = (rand() % 100) / 100.0;
-
-				if ((mutchance.large + mutchance.medium + mutchance.small) != 1) {
-					std::exit(-2);
+				if (temp <= 0.5) {
+					change = -change;
 				}
 
-				else if (temp <= mutchance.large) {
-					change = 0;
+				Naxon[i].weight += change;
+				NGENOME[i] += change;
+			}
 
-					while (change < 0.5) {
-						change = (rand() % 100) / 100.0;
-					}
+			else if (temp <= mutchance.medium + mutchance.large) {
+				change = 0;
 
-					temp = (rand() % 100) / 100.0;
-					if (temp <= 0.5) {
-						change = -change;
-					}
-
-					Naxon[i].weight += change;
-					NGENOME[i] += change;
+				while (change > 0.5 || change < 0.25) {
+					change = (rand() % 100) / 100.0;
 				}
 
-				else if (temp <= mutchance.medium + mutchance.large) {
-					change = 0;
-
-					while (change > 0.5 || change < 0.25) {
-						change = (rand() % 100) / 100.0;
-					}
-
-					temp = (rand() % 100) / 100.0;
-					if (temp <= 0.5) {
-						change = -change;
-					}
-
-					Naxon[i].weight += change;
-					NGENOME[i] += change;
+				temp = (rand() % 100) / 100.0;
+				if (temp <= 0.5) {
+					change = -change;
 				}
 
-				else if (temp <= mutchance.small + mutchance.medium + mutchance.large) {
-					change = (rand() % 10) / 100.0;
+				Naxon[i].weight += change;
+				NGENOME[i] += change;
+			}
 
-					temp = (rand() % 100) / 100.0;
-					if (temp <= 0.5) {
-						change = -change;
-					}
+			else if (temp <= mutchance.small + mutchance.medium + mutchance.large) {
+				change = (rand() % 10) / 100.0;
 
-					Naxon[i].weight += change;
-					NGENOME[i] += change;
+				temp = (rand() % 100) / 100.0;
+				if (temp <= 0.5) {
+					change = -change;
 				}
 
-				else {
-					std::exit(-3);
-				}
+				Naxon[i].weight += change;
+				NGENOME[i] += change;
+			}
+
+			else {
+				std::exit(-3);
 			}
 		}
 	}
